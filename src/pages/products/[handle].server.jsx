@@ -1,8 +1,4 @@
-import {useShopQuery, Seo} from '@shopify/hydrogen';
-import {
-  ProductProviderFragment,
-  ProductSeoFragment,
-} from '@shopify/hydrogen/fragments';
+import {useShopQuery, ProductProviderFragment, Seo} from '@shopify/hydrogen';
 import gql from 'graphql-tag';
 
 import ProductDetails from '../../components/ProductDetails.client';
@@ -50,12 +46,21 @@ const QUERY = gql`
   ) @inContext(country: $country) {
     product: product(handle: $handle) {
       id
+      description
       vendor
+      seo {
+        title
+        description
+      }
+      featuredImage {
+        url
+        height
+        width
+        altText
+      }
       ...ProductProviderFragment
-      ...ProductSeoFragment
     }
   }
 
   ${ProductProviderFragment}
-  ${ProductSeoFragment}
 `;

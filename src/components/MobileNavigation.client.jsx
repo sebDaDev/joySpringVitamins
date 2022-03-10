@@ -1,11 +1,9 @@
-import {Fragment, useEffect} from 'react';
+import {Fragment, useEffect, useState} from 'react';
 import {Link} from '@shopify/hydrogen/client';
 import {FocusTrap} from '@headlessui/react';
 
 import MobileCountrySelector from './MobileCountrySelector.client';
 import OpenIcon from './OpenIcon';
-
-let scrollPosition = 0;
 
 /**
  * A client component that defines the navigation for a mobile storefront
@@ -13,15 +11,17 @@ let scrollPosition = 0;
 export default function MobileNavigation({collections, isOpen, setIsOpen}) {
   const OpenFocusTrap = isOpen ? FocusTrap : Fragment;
 
+  const [topScrollOffset, setTopScrollOffset] = useState(0);
+
   useEffect(() => {
     if (isOpen) {
-      scrollPosition = window.scrollY;
+      setTopScrollOffset(window.scrollY);
       document.body.style.position = 'fixed';
-    } else if (document.body.style.position) {
+    } else {
       document.body.style.position = '';
-      window.scrollTo(0, scrollPosition);
+      window.scrollTo(0, parseInt(topScrollOffset, 10));
     }
-  }, [isOpen]);
+  }, [isOpen, topScrollOffset]);
 
   return (
     <div className="lg:hidden">
